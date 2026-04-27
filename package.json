@@ -6,7 +6,7 @@
   "scripts": {
     "dev:frontend": "npm --prefix frontend run dev",
     "build:frontend": "npm --prefix frontend run build",
-    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:frontend": "cd frontend && npm run lint",
     "test:e2e": "npm --prefix frontend run test:e2e",
     "lint:backend": "cd backend && python -m ruff check .",
     "test:backend": "cd backend && python -m pytest",
