@@ -2,16 +2,16 @@ import type { DeploymentConfig, ResourceItem, ServiceItem, ServiceCategory } fro
 
 interface BuilderCanvasProps {
   config: DeploymentConfig;
-  onConfigChange: (next: DeploymentConfig) => void;
+  onConfigChange: (next: DeploymentConfig | ((prev: DeploymentConfig) => DeploymentConfig)) => void;
 }
 
 export function BuilderCanvas({ config, onConfigChange }: BuilderCanvasProps) {
   const removeResource = (resourceId: string) => {
-    onConfigChange({ ...config, resources: config.resources.filter((resource) => resource.id !== resourceId) });
+    onConfigChange((prev) => ({ ...prev, resources: prev.resources.filter((resource) => resource.id !== resourceId) }));
   };
 
   const removeService = (serviceId: string) => {
-    onConfigChange({ ...config, services: config.services.filter((service) => service.id !== serviceId) });
+    onConfigChange((prev) => ({ ...prev, services: prev.services.filter((service) => service.id !== serviceId) }));
   };
 
   return (
@@ -32,7 +32,7 @@ export function BuilderCanvas({ config, onConfigChange }: BuilderCanvasProps) {
             count: parsed.value === "cpu" ? 1 : undefined,
             storageType: parsed.value === "disk" ? "ssd" : undefined,
           };
-          onConfigChange({ ...config, resources: [...config.resources, newResource] });
+          onConfigChange((prev) => ({ ...prev, resources: [...prev.resources, newResource] }));
           return;
         }
 
@@ -41,7 +41,7 @@ export function BuilderCanvas({ config, onConfigChange }: BuilderCanvasProps) {
           name: parsed.label ?? parsed.value,
           category: parsed.value as ServiceCategory,
         };
-        onConfigChange({ ...config, services: [...config.services, newService] });
+        onConfigChange((prev) => ({ ...prev, services: [...prev.services, newService] }));
       }}
     >
       <h2 className="mb-2 text-sm font-semibold text-slate-100">Deployment Builder</h2>

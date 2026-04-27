@@ -28,20 +28,22 @@ test("shows validation errors for invalid deployment", async ({ page }) => {
 
 test("generates yaml for valid deployment", async ({ page }) => {
   await page.goto("/");
-  await page.evaluate(() => {
-    const drop = (payload: object) => {
+  const payloads = [
+    { kind: "resource", value: "cpu" },
+    { kind: "resource", value: "disk" },
+    { kind: "resource", value: "memory" },
+  ];
+  for (const payload of payloads) {
+    await page.evaluate((p) => {
       const event = new DragEvent("drop", {
         dataTransfer: new DataTransfer(),
         bubbles: true,
         cancelable: true,
       });
-      event.dataTransfer?.setData("application/x-faktri", JSON.stringify(payload));
+      event.dataTransfer?.setData("application/x-faktri", JSON.stringify(p));
       document.querySelector("[data-testid='builder-canvas']")?.dispatchEvent(event);
-    };
-    drop({ kind: "resource", value: "cpu" });
-    drop({ kind: "service", value: "db", label: "DB" });
-    drop({ kind: "service", value: "drone_control_center", label: "Drone Control Center" });
-  });
+    }, payload);
+  }
   await page.getByTestId("generate-yaml-btn").click();
   await expect(page.getByTestId("yaml-output")).toContainText("name:");
 });
