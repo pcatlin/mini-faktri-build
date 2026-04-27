@@ -85,7 +85,7 @@ export default function App() {
             Save Draft
           </button>
           <button
-            data-testid="save-built-btn"
+            data-testid="save-build-btn"
             onClick={async () => {
               const response = await saveDeployment(config.name, "built", config);
               if (response.errors) {
@@ -99,7 +99,7 @@ export default function App() {
             }}
             className="w-full rounded bg-indigo-700 px-3 py-2 text-sm"
           >
-            Save Built
+            Save Build
           </button>
           <button
             data-testid="reset-build-btn"

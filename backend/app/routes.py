@@ -49,7 +49,9 @@ def register_routes(app: Flask) -> None:
             yaml_text = None
 
         repo = app.extensions["repo"]
-        deployment_id = repo.save_deployment(name=name, status=status, payload=config, yaml_text=yaml_text)
+        deployment_id = repo.save_deployment(
+            name=name, status=status, payload=config, yaml_text=yaml_text
+        )
         return {"id": deployment_id, "status": status, "yaml": yaml_text}, 201
 
     @app.get("/api/deployments")

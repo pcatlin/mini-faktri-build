@@ -18,19 +18,18 @@ class DeploymentRepository:
 
     def _initialize(self) -> None:
         with self._connect() as conn:
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS deployments (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    status TEXT NOT NULL,
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS deployments
+                (
+                    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name         TEXT NOT NULL,
+                    status       TEXT NOT NULL,
                     payload_json TEXT NOT NULL,
-                    yaml_text TEXT,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+                    yaml_text    TEXT,
+                    created_at   TEXT DEFAULT CURRENT_TIMESTAMP,
+                    updated_at   TEXT DEFAULT CURRENT_TIMESTAMP
                 )
-                """
-            )
+                """)
 
     def list_deployments(self) -> list[dict[str, Any]]:
         with self._connect() as conn:
@@ -40,7 +39,9 @@ class DeploymentRepository:
             ).fetchall()
         return [self._row_to_dict(r) for r in rows]
 
-    def save_deployment(self, *, name: str, status: str, payload: dict[str, Any], yaml_text: str | None) -> int:
+    def save_deployment(
+        self, *, name: str, status: str, payload: dict[str, Any], yaml_text: str | None
+    ) -> int:
         with self._connect() as conn:
             cur = conn.execute(
                 """

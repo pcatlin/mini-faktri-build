@@ -20,7 +20,9 @@ def validate_deployment_config(payload: dict[str, Any]) -> list[ValidationIssue]
     services = payload.get("services", [])
 
     if not isinstance(resources, list):
-        return [ValidationIssue("invalid_type", "resources", "Resources must be a list.")]
+        return [
+            ValidationIssue("invalid_type", "resources", "Resources must be a list.")
+        ]
     if not isinstance(services, list):
         return [ValidationIssue("invalid_type", "services", "Services must be a list.")]
 
@@ -31,7 +33,9 @@ def validate_deployment_config(payload: dict[str, Any]) -> list[ValidationIssue]
     for index, resource in enumerate(resources):
         path = f"resources[{index}]"
         if not isinstance(resource, dict):
-            issues.append(ValidationIssue("invalid_resource", path, "Resource must be an object."))
+            issues.append(
+                ValidationIssue("invalid_resource", path, "Resource must be an object.")
+            )
             continue
 
         r_type = resource.get("type")
@@ -57,7 +61,11 @@ def validate_deployment_config(payload: dict[str, Any]) -> list[ValidationIssue]
 
     if cpu_count < 1:
         issues.append(
-            ValidationIssue("missing_minimum_cpu", "resources", "Deployment requires at least 1 CPU.")
+            ValidationIssue(
+                "missing_minimum_cpu",
+                "resources",
+                "Deployment requires at least 1 CPU.",
+            )
         )
 
     if memory_count < 1:
@@ -71,12 +79,18 @@ def validate_deployment_config(payload: dict[str, Any]) -> list[ValidationIssue]
 
     if disk_count < 1:
         issues.append(
-            ValidationIssue("missing_minimum_disk", "resources", "Deployment requires at least 1 disk.")
+            ValidationIssue(
+                "missing_minimum_disk",
+                "resources",
+                "Deployment requires at least 1 disk.",
+            )
         )
 
     if cpu_count > 1:
         issues.append(
-            ValidationIssue("cpu_limit_exceeded", "resources", "CPU count cannot exceed 1 total.")
+            ValidationIssue(
+                "cpu_limit_exceeded", "resources", "CPU count cannot exceed 1 total."
+            )
         )
 
     if len(storage_kinds) > 1:
@@ -92,7 +106,9 @@ def validate_deployment_config(payload: dict[str, Any]) -> list[ValidationIssue]
     for index, service in enumerate(services):
         path = f"services[{index}]"
         if not isinstance(service, dict):
-            issues.append(ValidationIssue("invalid_service", path, "Service must be an object."))
+            issues.append(
+                ValidationIssue("invalid_service", path, "Service must be an object.")
+            )
             continue
 
         category = service.get("category")
